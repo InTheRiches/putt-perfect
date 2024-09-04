@@ -9,9 +9,10 @@ export default function TabLayout() {
   const colorScheme = useColorScheme();
 
   return (
-    <Tabs
-      screenOptions={{
+    <Tabs screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveBackgroundColor: Colors[colorScheme ?? 'light'].background,
+        tabBarInactiveBackgroundColor: Colors[colorScheme ?? 'light'].background,
         headerShown: false,
       }}>
       <Tabs.Screen
