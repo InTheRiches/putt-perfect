@@ -9,14 +9,15 @@ export function ThemedText({
   type = 'default',
   ...rest
 }) {
-  const color = useThemeColor({ light: lightColor, dark: darkColor }, secondary ? 'textSecondary' : 'text');
+  const color = useThemeColor(secondary ? 'textSecondary' : 'text');
   return (
     <Text
       style={[
-        { color },
+        { color: color },
         type === 'default' ? styles.default : undefined,
         type === 'logo' ? styles.logo : undefined,
         type === 'title' ? styles.title : undefined,
+        type === 'header' ? styles.header : undefined,
         type === 'defaultSemiBold' ? styles.defaultSemiBold : undefined,
         type === 'subtitle' ? styles.subtitle : undefined,
         type === 'link' ? styles.link : undefined,
@@ -60,4 +61,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#0a7ea4',
   },
+  header: {
+    fontSize: 22,
+    fontWeight: 'bold',
+  }
 });
