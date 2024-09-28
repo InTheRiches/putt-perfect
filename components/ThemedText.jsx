@@ -3,13 +3,14 @@ import { useThemeColor } from '@/hooks/useThemeColor';
 
 export function ThemedText({
   style,
-  lightColor,
-  darkColor,
+  lightColor = undefined,
+  darkColor = undefined,
   secondary = false,
   type = 'default',
   ...rest
 }) {
-  const color = useThemeColor(secondary ? 'textSecondary' : 'text');
+  const color = useThemeColor(secondary ? 'textSecondary' : 'text', lightColor, darkColor);
+  console.log(lightColor, darkColor, color);
   return (
     <Text
       style={[
@@ -50,7 +51,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 26,
     fontWeight: 'bold',
-    lineHeight: 26,
+    lineHeight: 32,
   },
   subtitle: {
     fontSize: 18,

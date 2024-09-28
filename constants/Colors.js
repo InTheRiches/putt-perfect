@@ -17,8 +17,11 @@ export const Colors = {
     tabIconDefault: '#687076',
     tabIconSelected: tintColorLight,
     border: "#CFCFCF",
-    buttonSecondaryBackground: "#fff",
-    buttonSecondaryBorder: "#B5B3B3"
+    buttonSecondaryBackground: "rgba(59, 130, 246, 0.15)",
+    buttonSecondaryBorder: "#B5B3B3",
+    buttonSecondaryDisabledBackground: "#f1f2f3",
+    buttonSecondaryDisabledBorder: "#D1D1D1",
+    buttonSecondaryDisabledText: "#C4C4C4"
   },
   dark: {
     text: '#fff',
@@ -31,6 +34,8 @@ export const Colors = {
     tabIconSelected: tintColorDark,
     border: "border-[#424647]",
     buttonSecondaryBackground: "#202425",
-    buttonSecondaryBorder: "#4c5155"
+    buttonSecondaryBorder: "#4c5155",
+    buttonSecondaryDisabledBorder: "#D1D1D1",
+    buttonSecondaryDisabledText: "#C4C4C4"
   },
 };

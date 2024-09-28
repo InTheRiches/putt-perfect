@@ -50,7 +50,7 @@ export default function HomeScreen() {
           </ThemedView>
         </ThemedView>
       </ThemedView>
-      {newSession && <View className="absolute inset-0 flex items-center justify-center z-50 h-screen w-full" style={{ backgroundColor: "rgba(0, 0, 0, 0.5)", paddingLeft: 48, paddingRight: 48, paddingTop: 180, paddingBottom: 250 }}>
+      {newSession && <View className="absolute inset-0 flex items-center justify-center z-50 h-screen w-full" style={{ backgroundColor: "rgba(0, 0, 0, 0.5)", paddingLeft: 48, paddingRight: 48, paddingTop: 220, paddingBottom: 250 }}>
         <NewSession setNewSession={setNewSession}></NewSession>
       </View>}
     </ThemedView>
