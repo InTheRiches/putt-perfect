@@ -65,5 +65,6 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 22,
     fontWeight: 'bold',
+    lineHeight: 26,
   }
 });

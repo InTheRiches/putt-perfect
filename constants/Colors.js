@@ -3,7 +3,7 @@
  * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
  */
 
-const tintColorLight = '#0a7ea4';
+const tintColorLight = '#06B2FF';
 const tintColorDark = '#fff';
 
 export const Colors = {
@@ -17,6 +17,11 @@ export const Colors = {
     tabIconDefault: '#687076',
     tabIconSelected: tintColorLight,
     border: "#CFCFCF",
+
+    buttonPrimaryBorder: "#06B2FF",
+    buttonPrimaryText: "#06B2FF",
+    buttonPrimaryBackground: "rgba(59, 130, 246, 0.15)",
+
     buttonSecondaryBackground: "rgba(59, 130, 246, 0.15)",
     buttonSecondaryBorder: "#B5B3B3",
     buttonSecondaryDisabledBackground: "#f1f2f3",
@@ -32,10 +37,16 @@ export const Colors = {
     icon: '#9BA1A6',
     tabIconDefault: '#9BA1A6',
     tabIconSelected: tintColorDark,
-    border: "border-[#424647]",
+    border: "#424647",
+
+    buttonPrimaryBorder: "#06B2FF",
+    buttonPrimaryText: "#06B2FF",
+    buttonPrimaryBackground: "rgba(59, 130, 246, 0.15)",
+
     buttonSecondaryBackground: "#202425",
     buttonSecondaryBorder: "#4c5155",
-    buttonSecondaryDisabledBorder: "#D1D1D1",
-    buttonSecondaryDisabledText: "#C4C4C4"
+    buttonSecondaryDisabledBackground: "#0c0d0e",
+    buttonSecondaryDisabledBorder: "#2E2E2E",
+    buttonSecondaryDisabledText: "#2E2E2E"
   },
 };

@@ -18,13 +18,13 @@ export default function HomeScreen() {
   const [ newSession, setNewSession ] = useState(false);
 
   return (
-    <ThemedView className="flex-1 items-center flex-col pt-16 overflow-hidden">
-      <ThemedView style={{ borderColor: Colors[colorScheme ?? 'light'].border}} className={"flex-row mb-6 items-center justify-between w-full border-b-[1px] pb-4 px-6"}>
+    <ThemedView className="flex-1 items-center flex-col pt-12 overflow-hidden">
+      <ThemedView style={{ borderColor: Colors[colorScheme ?? 'light'].border }} className={"flex-row mb-6 items-center justify-between w-full border-b-[1px] pb-4 px-6"}>
         <SvgLogo></SvgLogo>
         <SvgMenu></SvgMenu>
       </ThemedView>
       <ThemedView className={"px-6"}>
-        <ThemedView style={{ borderColor: Colors[colorScheme ?? 'light'].border}} className={"flex-row items-center justify-between w-full border-b-[1px] pb-6 mb-10"}>
+        <ThemedView style={{ borderColor: Colors[colorScheme ?? 'light'].border }} className={"flex-row items-center justify-between w-full border-b-[1px] pb-6 mb-10"}>
           <ThemedView className={"flex-row items-center"}>
             <Profile width={64} height={64}></Profile>
             <ThemedView className={"ml-2"}>
@@ -43,14 +43,14 @@ export default function HomeScreen() {
         </ThemedView>
         <ThemedView className="flex-col mb-4">
           <ThemedText className="mb-4" type="title">Recent Sessions</ThemedText>
-          <ThemedView className={"border items-center rounded-lg border-solid p-12 py-[40px] " + (colorScheme == 'light' ? "bg-background-secondary-light border-border-light" : "border-border-dark bg-background-secondary-dark")}>
+          <ThemedView style={{ borderColor: Colors[colorScheme ?? 'light'].border }} className={"border items-center rounded-lg border-solid p-12 py-[40px]"}>
             <ThemedText type="subtitle">No sessions</ThemedText>
             <ThemedText secondary = {true} className="text-center mb-8">Start a session to simulate 18 holes of make or break putts.</ThemedText>
             <ThemedButton onPress={() => setNewSession(true)} title="New session"></ThemedButton>
           </ThemedView>
         </ThemedView>
       </ThemedView>
-      {newSession && <View className="absolute inset-0 flex items-center justify-center z-50 h-screen w-full" style={{ backgroundColor: "rgba(0, 0, 0, 0.5)", paddingLeft: 48, paddingRight: 48, paddingTop: 240, paddingBottom: 270 }}>
+      {newSession && <View className="absolute inset-0 flex items-center justify-center z-50 h-screen w-full" style={{ backgroundColor: colorScheme == 'light' ? "rgba(0, 0, 0, 0.5)" : "rgba(0, 0, 0, 0.8)" }}>
         <NewSession setNewSession={setNewSession}></NewSession>
       </View>}
     </ThemedView>

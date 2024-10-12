@@ -16,10 +16,10 @@ export function ThemedButton({ onPress, title = 'Save', disabled = false }) {
           paddingVertical: 8,
           paddingHorizontal: 24,
           borderRadius: 6,
-          backgroundColor: disabled ? Colors[colorScheme ?? 'light'].buttonSecondaryDisabledBackground : Colors[colorScheme ?? 'light'].buttonSecondaryBackground,
+          backgroundColor: disabled ? Colors[colorScheme ?? 'light'].buttonSecondaryDisabledBackground : Colors[colorScheme ?? 'light'].buttonPrimaryBackground,
           borderStyle: "solid",
           borderWidth: 1,
-          borderColor: disabled ? Colors['light'].buttonSecondaryDisabledBorder : "#06B2FF",
+          borderColor: disabled ? Colors[colorScheme ?? 'light'].buttonSecondaryDisabledBorder : Colors[colorScheme ?? 'light'].buttonPrimaryBorder,
           overflow: "hidden",
           alignSelf: "center"
         }
@@ -27,7 +27,7 @@ export function ThemedButton({ onPress, title = 'Save', disabled = false }) {
 
     return (
         <Pressable style={styles.button} onPress={onPress}>
-            <ThemedText lightColor={disabled ? Colors['light'].buttonSecondaryDisabledText : "#06B2FF"} darkColor={disabled ? Colors['dark'].buttonSecondaryDisabledText : "#06B2FF"} type="defaultSemiBold">{title}</ThemedText>
+            <ThemedText lightColor={disabled ? Colors[colorScheme ?? 'light'].buttonSecondaryDisabledText : Colors[colorScheme ?? 'light'].buttonPrimaryText } darkColor={disabled ? Colors['dark'].buttonSecondaryDisabledText : Colors[colorScheme ?? 'light'].buttonPrimaryText } type="defaultSemiBold">{title}</ThemedText>
         </Pressable>
     );
 }

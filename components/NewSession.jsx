@@ -1,38 +1,48 @@
 import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
 import { View } from 'react-native';
 import { HorizRadioButton } from '@/components/HorizRadioButton';
-import Close from '../assets/svg/close.svg';
 import React, { useState } from 'react';
 import { ThemedButton } from "@/components/ThemedButton";
+import { SvgClose } from '@/assets/svg/SvgComponents';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { useColorScheme } from '@/hooks/useColorScheme';
+import { Colors } from '@/constants/Colors';
 
 export function NewSession({setNewSession}) {
+    const colorScheme = useColorScheme();
+
     const [holes, setHoles] = useState(null);
     const [difficulty, setDifficulty] = useState(null);
     const [mode, setMode] = useState(null);
 
     return (
-        <View style={{ backgroundColor: "white", width: "100%", height: "100%", borderRadius: 16, paddingTop: 5 }}>
-            <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignContent: 'center', width: "100%", paddingHorizontal: 20, paddingTop: 2, paddingBottom: 6, borderBottomWidth: 1, borderColor: "#E1E2E3" }}>
+        <ThemedView style={{ borderColor: colorScheme == 'light' ? "white" : Colors['dark'].border, borderWidth: 1, width: "auto", maxWidth: "80%", maxHeight: "70%", borderRadius: 16, paddingTop: 5 }}>
+            <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignContent: 'center', width: "100%", paddingHorizontal: 24, paddingTop: 8, paddingBottom: 8, borderBottomWidth: 1, borderColor: Colors[colorScheme ?? 'light'].border }}>
                 <ThemedText type="header">New Session</ThemedText>
-                <Close stroke={"black"} width={32} height={32} onPress={() => setNewSession(false)}></Close>
+                <TouchableWithoutFeedback onPress={() => setNewSession(false)}>
+                    <View style={{ justifyContent: 'center' }}>
+                        <SvgClose></SvgClose>
+                    </View>
+                </TouchableWithoutFeedback>
             </View>
             <View style={{ flexDirection: "column", alignContent: "center" }}>
-                <View style={{ paddingHorizontal: 16, marginTop: 6 }}>
+                <View style={{ paddingHorizontal: 24, marginTop: 12 }}>
                     <ThemedText type="subtitle">Holes</ThemedText>
                     <HorizRadioButton options={["9 Holes", "18 Holes"]} selectedOption={holes} setSelectedOption={setHoles}></HorizRadioButton>
                 </View>
-                <View style={{ paddingHorizontal: 16, marginTop: 10 }}>
+                <View style={{ paddingHorizontal: 24, marginTop: 10 }}>
                     <ThemedText type="subtitle">Difficulty</ThemedText>
                     <HorizRadioButton options={["Easy", "Medium", "Hard"]} selectedOption={difficulty} setSelectedOption={setDifficulty}></HorizRadioButton>
                 </View>
-                <View style={{ paddingHorizontal: 16, marginTop: 10 }}>
+                <View style={{ paddingHorizontal: 24, marginTop: 10 }}>
                     <ThemedText type="subtitle">Mode</ThemedText>
                     <HorizRadioButton options={["Random", "Mistakes"]} selectedOption={mode} setSelectedOption={setMode}></HorizRadioButton>
                 </View>
-                <View style={{ width: "100%", alignContent: "center", justifyContent: "center", marginTop: 14}}>
+                <View style={{ width: "100%", alignContent: "center", justifyContent: "center", marginTop: 20, marginBottom: 16 }}>
                     <ThemedButton onPress={() => setNewSession(true)} title="Start" disabled={holes == undefined || difficulty == undefined || mode == undefined}></ThemedButton>
                 </View>
             </View>
-        </View>
+        </ThemedView>
     )
 }
