@@ -10,7 +10,6 @@ export function ThemedText({
   ...rest
 }) {
   const color = useThemeColor(secondary ? 'textSecondary' : 'text', lightColor, darkColor);
-  console.log(lightColor, darkColor, color);
   return (
     <Text
       style={[
@@ -40,10 +39,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   logo: {
-    fontFamily: Platform.select({
-      android: 'Lobster_400Regular',
-      ios: 'Lobster-Regular',
-    }),
     fontSize: 32,
     fontWeight: 'bold',
     lineHeight: 32,
