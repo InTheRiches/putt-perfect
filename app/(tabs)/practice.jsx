@@ -3,12 +3,19 @@ import { ThemedView } from '@/components/ThemedView';
 import { View } from 'react-native';
 import { ThemedButton } from "@/components/ThemedButton";
 import { useColorScheme } from '@/hooks/useColorScheme';
+import Profile from '../../assets/svg/profile.svg';
 import { Image } from 'react-native';
+
 import { Colors } from '@/constants/Colors';
 import {SvgLogo, SvgMenu} from '../../assets/svg/SvgComponents';
 
 import  { NewSession } from '@/components/NewSession';
 import React, { useState } from 'react';
+
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+
+const Stack = createNativeStackNavigator();
 
 export default function HomeScreen() {
   const colorScheme = useColorScheme();
@@ -22,23 +29,6 @@ export default function HomeScreen() {
         <SvgMenu></SvgMenu>
       </ThemedView>
       <ThemedView className={"px-6"}>
-        <ThemedView style={{ borderColor: Colors[colorScheme ?? 'light'].border }} className={"flex-row items-center justify-between w-full border-b-[1px] pb-6 mb-10"}>
-          <ThemedView className={"flex-row items-center"}>
-            <Image source={require('../../assets/images/image.png')} style={{ width: 60, height: 60, borderRadius: 30 }} />
-            <ThemedView className={"ml-4"}>
-              <ThemedText type="subtitle">Hayden Williams</ThemedText>
-              <ThemedText type="default">Since 2024</ThemedText>
-              <ThemedText type="default">84 Sessions</ThemedText>
-            </ThemedView>
-          </ThemedView>
-          <ThemedView className="flex-col items-center justify-center">
-            <ThemedView  style={{ overflow: "hidden"}} type="secondary" className={"w-[56px] h-[56px] rounded-full items-center justify-center border-[1px] mb-1 border-[#96c7f2]"}>
-              <Image source={require('../../assets/images/pixelGradient.png')} style={{ position: "absolute", left: 0, width: 60, height: 60, zIndex: 10 }} />
-              <ThemedText type="header" style={{ lineHeight: 26, zIndex: 20, color: "#0081f1" }}>1.8</ThemedText>
-            </ThemedView>
-            <ThemedText type="defaultSemiBold" style={{ fontSize: 16 }}>Strokes Gained</ThemedText>
-          </ThemedView>
-        </ThemedView>
         <ThemedView className="flex-col mb-4">
           <ThemedText className="mb-4" type="title">Recent Sessions</ThemedText>
           <ThemedView style={{ borderColor: Colors[colorScheme ?? 'light'].border }} className={"border items-center rounded-lg border-solid p-12 py-[40px]"}>

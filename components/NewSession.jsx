@@ -8,13 +8,16 @@ import { SvgClose } from '@/assets/svg/SvgComponents';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { Colors } from '@/constants/Colors';
+import { useRouter } from 'expo-router';
 
 export function NewSession({setNewSession}) {
     const colorScheme = useColorScheme();
 
-    const [holes, setHoles] = useState(null);
-    const [difficulty, setDifficulty] = useState(null);
-    const [mode, setMode] = useState(null);
+    const [holes, setHoles] = useState("9 Holes");
+    const [difficulty, setDifficulty] = useState("Easy");
+    const [mode, setMode] = useState("Random");
+
+    const router = useRouter();
 
     return (
         <ThemedView style={{ borderColor: colorScheme == 'light' ? "white" : Colors['dark'].border, borderWidth: 1, width: "auto", maxWidth: "80%", maxHeight: "70%", borderRadius: 16, paddingTop: 5 }}>
@@ -39,8 +42,8 @@ export function NewSession({setNewSession}) {
                     <ThemedText type="subtitle">Mode</ThemedText>
                     <HorizRadioButton options={["Random", "Mistakes"]} selectedOption={mode} setSelectedOption={setMode}></HorizRadioButton>
                 </View>
-                <View style={{ width: "100%", alignContent: "center", justifyContent: "center", marginTop: 20, marginBottom: 16 }}>
-                    <ThemedButton onPress={() => setNewSession(true)} title="Start" disabled={holes == undefined || difficulty == undefined || mode == undefined}></ThemedButton>
+                <View style={{ width: "100%", alignContent: "center", justifyContent: "center", marginTop: 20, marginBottom: 24 }}>
+                    <ThemedButton onPress={() => router.push({ pathname: `/simulation`, params: { holes: holes, difficulty: difficulty, mode: mode }})} title="Start" disabled={holes == undefined || difficulty == undefined || mode == undefined}></ThemedButton>
                 </View>
             </View>
         </ThemedView>

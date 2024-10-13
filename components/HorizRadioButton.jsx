@@ -7,11 +7,6 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 export function HorizRadioButton({ options, selectedOption, setSelectedOption }) {
     const colorScheme = useColorScheme();
 
-    useEffect(() => {
-        if (selectedOption === undefined && options.length > 0)
-            setSelectedOption(options[0]);
-    }, [options]);
-
     const handleSelectOption = (option) => {
         if (selectedOption === option)
             setSelectedOption(undefined);
