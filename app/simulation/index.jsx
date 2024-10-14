@@ -51,7 +51,7 @@ export default function HomeScreen() {
               <ThemedText type="subtitle" secondary={true} style={{ fontWeight: "normal" }}>Break</ThemedText>
               <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
                 <ThemedText style={{ width: "75%" }} type="header">Left - Right Downhill</ThemedText>
-                <SvgArrow width="33" height="33"></SvgArrow>
+                <SvgArrow width="33" height="33" stroke={Colors[colorScheme ?? "light"].text}></SvgArrow>
               </View>
             </View>
             <View style={{ paddingHorizontal: 18, paddingTop: 12, gap: 6 }}>
@@ -68,10 +68,10 @@ export default function HomeScreen() {
             </View>
             <GestureDetector gesture={singleTap}>
               <View onLayout={onLayout}>
-                <Image source={require('../../assets/images/putting-grid.png')}  style={{ borderWidth: 1, borderRadius: 12, borderColor: "#3B6948", width: "100%", aspectRatio: "1", height: undefined  }}/>
-                <View style={{ justifyContent: "center", alignItems: "center", position: "absolute", left: width/2 - (width/20), top: height/2- (width/20), width: width/10 + 1, height: width/10 + 1, borderRadius: 24, backgroundColor: center ? Colors[colorScheme ?? "light"].buttonPrimaryBorder : "#fff" }}>
+                <Image source={colorScheme == 'dark' ? require('../../assets/images/putting-grid.png') : require('../../assets/images/putting-grid-light.png')}  style={{ borderWidth: 1, borderRadius: 12, borderColor: colorScheme == "dark" ? "#3B6948" : "transparent", width: "100%", aspectRatio: "1", height: undefined  }}/>
+                <View style={{ justifyContent: "center", alignItems: "center", position: "absolute", left: width/2 - (width/17), top: height/2- (width/17), width: width/8.5 + 1, height: width/8.5 + 1, borderRadius: 24, backgroundColor: center ? "#3EC264" : "#fff" }}>
                   {center ? (
-                    <Svg width={32} height={28} stroke="white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2">
+                    <Svg width={32} height={32} stroke="#157530" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="3">
                       <Path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
                     </Svg>
                     ) : null}

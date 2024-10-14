@@ -64,7 +64,7 @@ const SvgPractice = (props) => (
 
 const SvgArrow = (props) => (
   <Svg viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-    <Path d="M6.31498 2.85051L28.9792 4.22789M28.9792 4.22789L30.3566 26.8921M28.9792 4.22789L3.435 29.7721" stroke="#E1E2E3" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round"/>
+    <Path d="M6.31498 2.85051L28.9792 4.22789M28.9792 4.22789L30.3566 26.8921M28.9792 4.22789L3.435 29.7721" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round"/>
   </Svg>
 )
 
