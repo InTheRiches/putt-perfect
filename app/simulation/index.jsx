@@ -12,12 +12,61 @@ import { View } from 'react-native';
 import { useState } from 'react';
 import Svg, { Path } from 'react-native-svg';
 
-export default function HomeScreen() {
+const breaks = [
+  "Left -> Right",
+  "Right -> Left",
+  "Neutral",
+]
+
+const slopes = [
+  "Downhill",
+  "Neutral",
+  "Uphill"
+]
+
+function generateBreak() {
+  // Generate a random break
+  return breaks[Math.floor(Math.random() * breaks.length)] + " " + slopes[Math.floor(Math.random() * slopes.length)];
+}
+
+function generateDistance(difficulty) {
+  // Generate a random distance
+  return Math.floor(Math.random() * (difficulty == "Easy" ? 6 : difficulty == "Medium" ? 12 : 20)) + 3;
+} 
+
+export default function Simulation() {
   const colorScheme = useColorScheme();
+
+  const { holes, difficulty, mode } = useLocalSearchParams();
 
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
+  
   const [center, setCenter] = useState(false);
+  const [point, setPoint] = useState({});
+
+  const [hole, setHole] = useState(1);
+  const [puttBreak, setPuttBreak] = useState(generateBreak());
+  const [distance, setDistance] = useState(generateDistance(difficulty))
+
+  const [putts, setPutts] = useState([]);
+  
+  const switchHoles = () => {
+    if (hole == holes) {
+      // end simulation
+    }
+
+    // find the distance to center of the point in x and y
+    // TODO add a singular button at the bottom for if you miss > 5ft
+    const distanceX = width / 2 - point.x;
+    const distanceY = height / 2 - point.y;
+    const distanceMissed = center ? 0 : Math.sqrt((distanceX * distanceX) + (distanceY * distanceY));
+    setPutts([...putts, { x: point.x, y: point.y, distanceMissed: distanceMissed, distance: distance, break: puttBreak }])
+
+    setPuttBreak(generateBreak());
+    setHole(hole + 1);
+    setDistance(generateDistance(difficulty));
+  }
 
   const onLayout = (event) => {
     const { width, height } = event.nativeEvent.layout;
@@ -25,10 +74,6 @@ export default function HomeScreen() {
     setWidth(width);
     setHeight(height);
   };
-
-  const item = useLocalSearchParams();
-
-  const [point, setPoint] = useState({});
 
   const singleTap = Gesture.Tap()
     .onStart((data) => {
@@ -45,18 +90,18 @@ export default function HomeScreen() {
       </ThemedView>
       <ThemedView className={"px-6"} style={{ width: "100%" }}>
         <ThemedView className="flex-col mb-4">
-          <ThemedText className="mb-4" type="title">Hole 1</ThemedText>
+          <ThemedText className="mb-4" type="title">Hole {hole}</ThemedText>
           <View style={{ backgroundColor: Colors[colorScheme ?? "light"].backgroundSecondary, borderRadius: 15, borderWidth: 1, borderColor: Colors[colorScheme ?? "light"].border, paddingVertical: 12 }}>
             <View style={{ borderBottomWidth: 1, borderColor: Colors[colorScheme ?? "light"].border, paddingHorizontal: 18, paddingBottom: 12, gap: 6 }}>
               <ThemedText type="subtitle" secondary={true} style={{ fontWeight: "normal" }}>Break</ThemedText>
               <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                <ThemedText style={{ width: "75%" }} type="header">Left - Right Downhill</ThemedText>
+                <ThemedText style={{ width: "75%" }} type="header">{puttBreak}</ThemedText>
                 <SvgArrow width="33" height="33" stroke={Colors[colorScheme ?? "light"].text}></SvgArrow>
               </View>
             </View>
             <View style={{ paddingHorizontal: 18, paddingTop: 12, gap: 6 }}>
               <ThemedText type="subtitle" secondary={true} style={{ fontWeight: "normal" }}>Distance</ThemedText>
-              <ThemedText type="header">4ft</ThemedText>
+              <ThemedText type="header">{distance}ft</ThemedText>
             </View>
           </View>
           <View>
@@ -81,6 +126,10 @@ export default function HomeScreen() {
                 ) : null}
               </View>
             </GestureDetector>
+            <View>
+              <ThemedButton title="Back" disabled={hole == 1}></ThemedButton>
+              <ThemedButton title="Next" disabled={hole == holes || point.x == undefined}></ThemedButton>
+            </View>
           </View>
         </ThemedView>
       </ThemedView>
