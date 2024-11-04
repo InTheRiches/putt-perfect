@@ -7,7 +7,7 @@ import { Image } from 'react-native';
 import { Colors } from '@/constants/Colors';
 import {SvgLogo, SvgMenu} from '../../assets/svg/SvgComponents';
 
-import  { NewSession } from '@/components/NewSession';
+import  { NewSession } from '@/components/popups/NewSession';
 import React, { useState } from 'react';
 
 export default function HomeScreen() {
@@ -17,7 +17,7 @@ export default function HomeScreen() {
 
   return (
     <ThemedView className="flex-1 items-center flex-col pt-12 overflow-hidden">
-      <ThemedView style={{ borderColor: Colors[colorScheme ?? 'light'].border }} className={"flex-row mb-6 items-center justify-between w-full border-b-[1px] pb-4 px-6"}>
+      <ThemedView style={{ borderColor: Colors[colorScheme ?? 'light'].border }} className={"flex-row mb-6 items-center justify-between w-full border-b-[1px] pb-2 px-6"}>
         <SvgLogo></SvgLogo>
         <SvgMenu></SvgMenu>
       </ThemedView>

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { View, StyleSheet, Text, StatusBar, TouchableOpacity } from 'react-native';
-import { ThemedText } from './ThemedText';
+import { ThemedText } from '@/components/ThemedText';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
@@ -19,7 +19,7 @@ export function HorizRadioButton({ options, selectedOption, setSelectedOption })
 
         // Check if the current option is selected
         const isSelected = selectedOption === option;
-        
+
         // Set the base border color
         style = isSelected ? { ...style, borderColor: "#06B2FF", backgroundColor: "rgba(59, 130, 246, 0.15)" } : { ...style, borderColor: Colors[colorScheme ?? 'light'].border };
 
@@ -28,7 +28,7 @@ export function HorizRadioButton({ options, selectedOption, setSelectedOption })
             style = { ...style, borderLeftWidth: 0, borderRightWidth: 0 };
         if ((index < options.length - 1 && selectedOption === options[index + 1]) || ((index < options.length - 2 && selectedOption === options[index + 2])))
             style = { ...style, borderRightWidth: 0 };
-    
+
         // Handle border radius for the first and last options
         if (index === 0)
             style = { ...style, borderTopLeftRadius: 8, borderBottomLeftRadius: 8 };
@@ -38,17 +38,17 @@ export function HorizRadioButton({ options, selectedOption, setSelectedOption })
         if (index != options.length - 1 && selectedOption == undefined) {
             style = { ...style, borderRightWidth: 0 };
         }
-    
+
         return (
-            <TouchableOpacity 
+            <TouchableOpacity
                 style={style}
                 key={option}
                 onPress={() => handleSelectOption(option)}
                 activeOpacity={0.75}
             >
-                <View style={[styles.radioCircle, 
+                <View style={[styles.radioCircle,
                     { backgroundColor: selectedOption === option ? '#06B2FF' : Colors[colorScheme ?? 'light'].background, borderColor: selectedOption === option ? '#06B2FF' : Colors[colorScheme ?? 'light'].border }]}>
-                    {selectedOption === option && 
+                    {selectedOption === option &&
                         <View style={styles.selectedRadioInnerCircle} />
                     }
                 </View>

@@ -6,7 +6,7 @@ import { Image } from 'react-native';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
-export function ThemedButton({ onPress, title = 'Save', disabled = false }) {
+export function ThemedButton({ onPress, title = 'Save', disabled = false, ...rest }) {
     const colorScheme = useColorScheme();
 
     const styles = StyleSheet.create({
@@ -26,7 +26,7 @@ export function ThemedButton({ onPress, title = 'Save', disabled = false }) {
       });
 
     return (
-        <Pressable style={styles.button} onPress={onPress}>
+        <Pressable style={styles.button} onPress={onPress} {...rest}>
             <ThemedText lightColor={disabled ? Colors[colorScheme ?? 'light'].buttonSecondaryDisabledText : Colors[colorScheme ?? 'light'].buttonPrimaryText } darkColor={disabled ? Colors['dark'].buttonSecondaryDisabledText : Colors[colorScheme ?? 'light'].buttonPrimaryText } type="defaultSemiBold">{title}</ThemedText>
         </Pressable>
     );

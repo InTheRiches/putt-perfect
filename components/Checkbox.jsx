@@ -5,7 +5,7 @@ import Svg, { Path } from 'react-native-svg';
 
 import { Colors } from '@/constants/Colors';
 
-export function Checkbox() {
+export function Checkbox({ checked, setChecked }) {
     const colorScheme = useColorScheme();
 
     const styles = StyleSheet.create({
@@ -25,7 +25,6 @@ export function Checkbox() {
         },
     });
 
-    const [checked, setChecked] = useState(false);
     return (
       <Pressable
         style={[styles.checkboxBase, checked && styles.checkboxChecked]}

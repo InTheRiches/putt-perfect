@@ -3,19 +3,11 @@ import { ThemedView } from '@/components/ThemedView';
 import { View } from 'react-native';
 import { ThemedButton } from "@/components/ThemedButton";
 import { useColorScheme } from '@/hooks/useColorScheme';
-import Profile from '../../assets/svg/profile.svg';
-import { Image } from 'react-native';
 
 import { Colors } from '@/constants/Colors';
 import {SvgLogo, SvgMenu} from '../../assets/svg/SvgComponents';
 
-import  { NewSession } from '@/components/NewSession';
 import React, { useState } from 'react';
-
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-
-const Stack = createNativeStackNavigator();
 
 export default function HomeScreen() {
   const colorScheme = useColorScheme();
@@ -38,9 +30,6 @@ export default function HomeScreen() {
           </ThemedView>
         </ThemedView>
       </ThemedView>
-      {newSession && <View className="absolute inset-0 flex items-center justify-center z-50 h-screen w-full" style={{ backgroundColor: colorScheme == 'light' ? "rgba(0, 0, 0, 0.5)" : "rgba(0, 0, 0, 0.8)" }}>
-        <NewSession setNewSession={setNewSession}></NewSession>
-      </View>}
     </ThemedView>
   );
 }

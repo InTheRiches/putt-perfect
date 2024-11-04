@@ -8,7 +8,7 @@ const tintColorDark = '#fff';
 
 export const Colors = {
   light: {
-    text: '#11181C',
+    text: '#111827',
     textSecondary: "#687076",
     background: '#fff',
     backgroundSecondary: "#fff",
@@ -26,7 +26,14 @@ export const Colors = {
     buttonSecondaryBorder: "#B5B3B3",
     buttonSecondaryDisabledBackground: "#f1f2f3",
     buttonSecondaryDisabledBorder: "#D1D1D1",
-    buttonSecondaryDisabledText: "#C4C4C4"
+    buttonSecondaryDisabledText: "#C4C4C4",
+
+    buttonDangerBackground: "#DC2626",
+    buttonDangerBorder: "#DC2626",
+    buttonDangerText: "#FFFFFF",
+    buttonDangerDisabledBackground: "#FEE2E2",
+    buttonDangerDisabledBorder: "#FEE2E2",
+    buttonDangerDisabledText: "#FFFFFF",
   },
   dark: {
     text: '#fff',
@@ -47,6 +54,13 @@ export const Colors = {
     buttonSecondaryBorder: "#4c5155",
     buttonSecondaryDisabledBackground: "#0c0d0e",
     buttonSecondaryDisabledBorder: "#2E2E2E",
-    buttonSecondaryDisabledText: "#2E2E2E"
+    buttonSecondaryDisabledText: "#2E2E2E",
+
+    buttonDangerBackground: "#C13838",
+    buttonDangerBorder: "#C13838",
+    buttonDangerText: "#E1E2E3",
+    buttonDangerDisabledBackground: "#C13838",
+    buttonDangerDisabledBorder: "#C13838",
+    buttonDangerDisabledText: "#C13838",
   },
 };
