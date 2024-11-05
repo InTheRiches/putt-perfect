@@ -1,7 +1,26 @@
 // src/contexts/SessionProvider.js
 import React, { useContext, createContext, useEffect, useState } from 'react';
-import { getAuth } from "firebase/auth";
+import {getAuth, getReactNativePersistence, initializeAuth} from "firebase/auth";
 import { useStorageState } from './StorageState';
+import {initializeApp} from "firebase/app";
+import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
+
+const firebaseConfig = {
+  apiKey: 'AIzaSyAP7ZATyBFL934s87r-tvZNAVpq7t2cJas',
+  authDomain: 'puttperfect-e6438.firebaseapp.com',
+  databaseURL: 'https://puttperfect-e6438.firebaseio.com',
+  projectId: 'puttperfect-e6438',
+  storageBucket: 'puttperfect-e6438.firebasestorage.app',
+  messagingSenderId: '737663000705',
+  appId: '1:737663000705:android:c9f64932c750feaf02ed80',
+  measurementId: 'G-measurement-id',
+};
+
+export const app = initializeApp(firebaseConfig);
+export const auth = initializeAuth(app, {
+  persistence: getReactNativePersistence(ReactNativeAsyncStorage)
+});
+
 
 const AuthContext = createContext({
   signIn: () => Promise.resolve(),
@@ -19,12 +38,12 @@ export function SessionProvider({ children }) {
   const [[isLoading, session], setSession] = useStorageState('session', null);
   const [loading, setLoading] = useState(true);
 
-    const firebase = getAuth();
+    const auth = getAuth();
 
   // Firebase sign-in function
   const signIn = async (email, password) => {
     try {
-      const userCredential = await firebase.signInWithEmailAndPassword(email, password);
+      const userCredential = await auth.signInWithEmailAndPassword(email, password);
       const token = await userCredential.user.getIdToken();
       setSession(token || null);
     } catch (error) {
@@ -36,7 +55,7 @@ export function SessionProvider({ children }) {
   // Firebase sign-out function
   const signOut = async () => {
     try {
-      await firebase.signOut();
+      await auth.signOut();
       setSession(null);
     } catch (error) {
       console.error('Error during sign-out:', error);
@@ -45,7 +64,7 @@ export function SessionProvider({ children }) {
 
   // Monitor Firebase authentication state changes
   useEffect(() => {
-    const unsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         const token = await user.getIdToken();
         setSession(token);

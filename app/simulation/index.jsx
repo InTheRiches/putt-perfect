@@ -76,23 +76,24 @@ export default function Simulation() {
     setState(initialState);
   }
 
+  useEffect(() => {
+    updateField("distance", generateDistance(difficulty));
+  });
+
   React.useEffect(() => {
-      updateField("distance", generateDistance(difficulty));
+    navigation.addListener('beforeRemove', (e) => {
+      if (confirmLeave || distance === initialState.distance) {
+        resetState();
+        return;
+      }
 
-      navigation.addListener('beforeRemove', (e) => {
-        console.log(confirmLeave);
-        if (confirmLeave) {
-          resetState();
-          return;
-        }
+      console.log("blocked");
 
-        console.log("blocked");
+      // Prevent default behavior of leaving the screen (if needed)
+      e.preventDefault();
 
-        // Prevent default behavior of leaving the screen (if needed)
-        e.preventDefault();
-
-        updateField("confirmLeave", true);
-      })
+      updateField("confirmLeave", true);
+    })
   }, [navigation]);
 
   const nextHole = () => {

@@ -9,6 +9,7 @@ const tintColorDark = '#fff';
 export const Colors = {
   light: {
     text: '#111827',
+    textMiddle: "#374151",
     textSecondary: "#687076",
     background: '#fff',
     backgroundSecondary: "#fff",
@@ -24,6 +25,7 @@ export const Colors = {
 
     buttonSecondaryBackground: "rgba(59, 130, 246, 0.15)",
     buttonSecondaryBorder: "#B5B3B3",
+    buttonSecondaryText: "#B5B3B3",
     buttonSecondaryDisabledBackground: "#f1f2f3",
     buttonSecondaryDisabledBorder: "#D1D1D1",
     buttonSecondaryDisabledText: "#C4C4C4",
@@ -37,6 +39,7 @@ export const Colors = {
   },
   dark: {
     text: '#fff',
+    textMiddle: "#CDD0D3",
     textSecondary: "#9ba1a6",
     background: '#0c0d0e',
     backgroundSecondary: "#1E1E1E",
@@ -52,6 +55,7 @@ export const Colors = {
 
     buttonSecondaryBackground: "#202425",
     buttonSecondaryBorder: "#4c5155",
+    buttonSecondaryText: "#9ba1a6",
     buttonSecondaryDisabledBackground: "#0c0d0e",
     buttonSecondaryDisabledBorder: "#2E2E2E",
     buttonSecondaryDisabledText: "#2E2E2E",
