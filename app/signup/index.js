@@ -11,6 +11,16 @@ export default function Signup() {
 
     const [emailFocused, setEmailFocused] = useState(false);
     const [passwordFocused, setPasswordFocused] = useState(false);
+    const [invalidPassword, setInvalidPassword] = setState(false);
+    const [invalidEmail, setInvalidEmail] = setState(false);
+
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    const validateEmail = (email) => {
+        const re = /^[\w\-\.]+@([\w-]+\.)+[\w-]{2,}$/;
+        setInvalidEmail(!re.test(email));
+    }
 
     return (
     <View style={{ backgroundColor: Colors[colorScheme ?? "light"].backgroundColor, width: "100%", height: "100%", paddingTop: 50, paddingHorizontal: 24, justifyContent: "center", alignContent: "center" }}>
@@ -32,18 +42,26 @@ export default function Signup() {
             </View>
 
             <ThemedText style={{ fontSize: 16, marginTop: 12, marginBottom: 4 }}>Email Address</ThemedText>
-            <TextInput
-            style={{ borderWidth: 1, borderColor: emailFocused ? Colors[colorScheme ?? "light"].buttonPrimaryBorder : Colors[colorScheme ?? "light"].buttonSecondaryBorder, borderRadius: 10, paddingVertical: 4, paddingHorizontal: 10, fontSize: 16, color: Colors[colorScheme ?? "light"].text, backgroundColor: Colors[colorScheme ?? "light"].buttonSecondaryBackground }}
-            onFocus={() => setEmailFocused(true)}
-            onBlur={()=> setEmailFocused(false)}
-            />
+            <View style={{ flexDirection: "row" }}>
+                <TextInput
+                    style={{ borderWidth: 1, borderColor: invalidEmail ? "#FCA5A5" : emailFocused ? Colors[colorScheme ?? "light"].buttonPrimaryBorder : Colors[colorScheme ?? "light"].buttonSecondaryBorder, borderRadius: 10, paddingVertical: 4, paddingHorizontal: 10, fontSize: 16, color: Colors[colorScheme ?? "light"].text, backgroundColor: Colors[colorScheme ?? "light"].buttonSecondaryBackground }}
+                    onFocus={() => setEmailFocused(true)}
+                    onBlur={() => setEmailFocused(false) && validateEmail(email)}
+                    onChangeText={(text) => setEmail(text)}
+                />
+                {invalidEmail && <Text style={{ position: "absolute", right: 4, color: "white", backgroundColor: "#EF4444", borderRadius: 50, aspectRatio: 1 }}>!</Text>}
+            </View>
 
             <ThemedText style={{ fontSize: 16, marginTop: 16, marginBottom: 4 }}>Password</ThemedText>
-            <TextInput
-            style={{ borderWidth: 1, borderColor: passwordFocused ? Colors[colorScheme ?? "light"].buttonPrimaryBorder : Colors[colorScheme ?? "light"].buttonSecondaryBorder, borderRadius: 10, paddingVertical: 4, paddingHorizontal: 10, fontSize: 16, color: Colors[colorScheme ?? "light"].text, backgroundColor: Colors[colorScheme ?? "light"].buttonSecondaryBackground }}
-            onFocus={() => setPasswordFocused(true)}
-            onBlur={()=> setPasswordFocused(false)}
-            />
+            <View style={{ flexDirection: "row" }}>
+                <TextInput
+                        style={{ borderWidth: 1, borderColor: invalidPassword ? "#FCA5A5" : passwordFocused ? Colors[colorScheme ?? "light"].buttonPrimaryBorder : Colors[colorScheme ?? "light"].buttonSecondaryBorder, borderRadius: 10, paddingVertical: 4, paddingHorizontal: 10, fontSize: 16, color: Colors[colorScheme ?? "light"].text, backgroundColor: Colors[colorScheme ?? "light"].buttonSecondaryBackground }}
+                        onFocus={() => setPasswordFocused(true)}
+                        onBlur={()=> setPasswordFocused(false)}
+                        onChangeText={(text) => setInvalidPassword(text.length < 4)}
+                />
+                {invalidPassword && <Text style={{ position: "absolute", right: 4, color: "white", backgroundColor: "#EF4444", borderRadius: 50, aspectRatio: 1 }}>!</Text>}
+            </View>
 
             <Pressable style={{ flex: 1, paddingVertical: 12, borderRadius: 10, flexDirection: "row", alignContent: "center", justifyContent: "center", backgroundColor: Colors[colorScheme ?? "light"].buttonPrimaryBorder }}>
                 <ThemedText type={"default"}>Create Your Account</ThemedText>
