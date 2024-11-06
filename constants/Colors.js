@@ -66,5 +66,14 @@ export const Colors = {
     buttonDangerDisabledBackground: "#C13838",
     buttonDangerDisabledBorder: "#C13838",
     buttonDangerDisabledText: "#C13838",
+
+    inputBackground: "#202425",
+    inputFocusedBackground: "#202425",
+    inputInvalidBackground: "#202425",
+    inputBorder: "#4c5155",
+    inputFocusedBorder: "#06B2FF",
+    inputInvalidBorder: "#943737",
+    inputInvalidFocusedBorder: "#dc2626",
+    inputInvalidText: "#CF5151"
   },
 };
