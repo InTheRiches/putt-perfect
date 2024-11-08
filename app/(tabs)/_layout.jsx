@@ -7,6 +7,7 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import { SvgHome, SvgPractice } from '@/assets/svg/SvgComponents';
 import { useSession } from '@/contexts/ctx';
 import {Text} from "react-native";
+import {getAuth} from "firebase/auth";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -25,6 +26,14 @@ export default function TabLayout() {
     // in the headless Node process that the pages are rendered in.
     // TODO FIGURE OUT IF YOU WANT TO REDIRECT TO SIGN UP OR SIGN IN
     return <Redirect href="/signup" />;
+  }
+
+  const auth = getAuth();
+
+  if (auth.currentUser !== null) {
+    if (auth.currentUser.displayName === null) {
+      return <Redirect href="/signup/finish" />
+    }
   }
 
   return (

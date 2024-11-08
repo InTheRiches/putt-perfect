@@ -4,16 +4,18 @@ import {Colors} from "../../constants/Colors";
 import {ThemedText} from "../../components/ThemedText";
 import {SvgGoogle} from "../../assets/svg/SvgComponents";
 import {useState} from "react";
-import {ThemedButton} from "../../components/ThemedButton";
 import Svg, {Path} from "react-native-svg";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {useRouter} from "expo-router";
 
 const initialState = {
     email: "",
     password: ""
 }
-
+// TODO ADD support for when an email already exists (error variable, and set the text in the error depending on it)
 export default function Signup() {
     const colorScheme = useColorScheme();
+    const router = useRouter();
 
     const [emailFocused, setEmailFocused] = useState(false);
     const [passwordFocused, setPasswordFocused] = useState(false);
@@ -25,11 +27,10 @@ export default function Signup() {
         hasUppercase: false,
         hasLowercase: false,
         hasNumber: false,
+        invalid: true,
       });
 
     const [state, setState] = useState(initialState)
-
-    const [password, setPassword] = useState("");
 
     const validateEmail = (newEmail) => {
         const re = /^[\w\-\.]+@([\w-]+\.)+[\w-]{2,}$/;
@@ -45,6 +46,7 @@ export default function Signup() {
             hasUppercase: /[A-Z]/.test(newPassword),
             hasLowercase: /[a-z]/.test(newPassword),
             hasNumber: /[0-9]/.test(newPassword),
+            invalid: !re.test(newPassword),
           });
     }
 
@@ -65,6 +67,24 @@ export default function Signup() {
 
         validatePassword(password);
     }
+
+    const createAccount = () => {
+        if (state.invalid) return;
+
+        const auth = getAuth();
+        createUserWithEmailAndPassword(auth, state.email, state.password)
+          .then((userCredential) => {
+            // Signed up
+            const user = userCredential.user;
+            router.push({ pathname: `/signup/finish` });
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+
+          });
+    }
+
     return (
     <View style={{ backgroundColor: Colors[colorScheme ?? "light"].backgroundColor, width: "100%", height: "100%", paddingTop: 50, paddingHorizontal: 24, justifyContent: "center", alignContent: "center" }}>
         <View>
@@ -108,7 +128,7 @@ export default function Signup() {
                 />
                 {invalidPassword && <Text style={{ position: "absolute", right: 12, top: 7.5, color: "white", backgroundColor: "#EF4444", borderRadius: 50, aspectRatio: 1, width: 22, textAlign: "center", fontSize: 16 }}>!</Text>}
             </View>
-            <ThemedText>Password Requirements:</ThemedText>
+            <Text style={{color: !requirements.invalid ? '#16a34a' : Colors[colorScheme ?? "light"].inputInvalidText}}>Password Requirements:</Text>
             <View style={{ flexDirection: "row", gap: 10, alignContent: "center"}}>
                 { requirements.hasLength ? <ValidRequirement/> : <InvalidRequirement/> }
                 <Text style={{ color: requirements.hasLength ? '#16a34a' : Colors[colorScheme ?? "light"].inputInvalidText }}>At least 6 characters</Text>
@@ -126,7 +146,7 @@ export default function Signup() {
                 <Text style={{ color: requirements.hasLowercase ? '#16a34a' : Colors[colorScheme ?? "light"].inputInvalidText }}>Contains a lowercase</Text>
             </View>
 
-            <Pressable style={{ paddingVertical: 10, borderRadius: 10, marginTop: 48, backgroundColor: Colors[colorScheme ?? "light"].buttonPrimaryBorder }}>
+            <Pressable onPress={createAccount} style={{ paddingVertical: 10, borderRadius: 10, marginTop: 48, backgroundColor: Colors[colorScheme ?? "light"].buttonPrimaryBorder }}>
                 <Text style={{ textAlign: "center", color: "white" }}>Create your account</Text>
             </Pressable>
         </View>

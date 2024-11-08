@@ -4,19 +4,23 @@ import {getAuth, getReactNativePersistence, initializeAuth} from "firebase/auth"
 import { useStorageState } from './StorageState';
 import {initializeApp} from "firebase/app";
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
+import {initializeFirestore} from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyAP7ZATyBFL934s87r-tvZNAVpq7t2cJas',
-  authDomain: 'puttperfect-e6438.firebaseapp.com',
-  databaseURL: 'https://puttperfect-e6438.firebaseio.com',
-  projectId: 'puttperfect-e6438',
-  storageBucket: 'puttperfect-e6438.firebasestorage.app',
-  messagingSenderId: '737663000705',
-  appId: '1:737663000705:android:c9f64932c750feaf02ed80',
-  measurementId: 'G-measurement-id',
+  apiKey: "AIzaSyAP7ZATyBFL934s87r-tvZNAVpq7t2cJas",
+  authDomain: "puttperfect-e6438.firebaseapp.com",
+  projectId: "puttperfect-e6438",
+  storageBucket: "puttperfect-e6438.firebasestorage.app",
+  messagingSenderId: "737663000705",
+  appId: "1:737663000705:web:d3a6ed8c2e2f8a9c02ed80",
+  measurementId: "G-ZM9VDTXJY9"
 };
 
 export const app = initializeApp(firebaseConfig);
+export const firestore = initializeFirestore(app, {
+  experimentalForceLongPolling: true,
+  useFetchStreams: false,
+});
 export const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(ReactNativeAsyncStorage)
 });
@@ -38,7 +42,7 @@ export function SessionProvider({ children }) {
   const [[isLoading, session], setSession] = useStorageState('session', null);
   const [loading, setLoading] = useState(true);
 
-    const auth = getAuth();
+  const auth = getAuth();
 
   // Firebase sign-in function
   const signIn = async (email, password) => {
