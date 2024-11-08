@@ -30,14 +30,14 @@ const ArrowComponent = ({ horizontalBreak, verticalSlope, colorScheme }) => {
   const rotation = getRotationAngle(horizontalBreak, verticalSlope);
 
   return (
-    <View>
+    <View style={{marginBottom: 2}}>
       {(horizontalBreak === 2 && verticalSlope === 1) ?
-        <View style={{ width: 33, height: 33, borderRadius: 50, backgroundColor: Colors[colorScheme ?? "light"].text }}></View> :
+        <View style={{ width: 33, height: 33, borderRadius: 50, backgroundColor: Colors[colorScheme ?? "light"].text, marginRight: 6 }}></View> :
         <SvgArrow
-          width="33"
-          height="33"
+          width="28"
+          height="28"
           stroke={Colors[colorScheme ?? "light"].text}
-          style={{ transform: [{ rotate: rotation }] }}
+          style={{ transform: [{ rotate: rotation }], marginBottom: 4.5 }}
         />}
     </View>
   );

@@ -21,6 +21,7 @@ export default function FinishSignup() {
     const colorScheme = useColorScheme();
     const db = getFirestore();
     const router = useRouter();
+    const auth = getAuth();
 
     const [state, setState] = useState(initialState);
 
@@ -31,7 +32,6 @@ export default function FinishSignup() {
         if (state.tab === 3 && state.name === "") return;
 
         if (state.tab === 4) {
-            const auth = getAuth();
             updateProfile(auth.currentUser, {
               displayName: state.name,
             }).then(() => {
@@ -46,6 +46,8 @@ export default function FinishSignup() {
               skill: state.skill,
               frequency: state.frequency,
               putts: state.putts,
+              date: new Date().toISOString(),
+              totalPutts: 0
             }).then(() => {
                 router.push({ pathname: `/` });
             });
@@ -64,7 +66,7 @@ export default function FinishSignup() {
             {state.tab === 2 && <Putts colorScheme={colorScheme} state={state} setState={setState}/>}
             {state.tab === 3 && <Name colorScheme={colorScheme} state={state} setState={setState}/>}
             {state.tab === 4 && <Done/>}
-            <View style={{ flexDirection: "row", justifyContent: "center", alignContent: "center" }}>
+            <View style={{ display: state.tab === 5 ? "none" : "static", flexDirection: "row", justifyContent: "center", alignContent: "center" }}>
                 <Pressable onPress={nextTab} style={{ backgroundColor: Colors[colorScheme ?? "light"].buttonPrimaryBorder, padding: 16, aspectRatio: 1, borderRadius: 50, marginTop: 48 }}>
                     <SvgArrow width={16} height={16} stroke={"white"} style={{ transform: [{ rotate: "45deg" }] }}></SvgArrow>
                 </Pressable>

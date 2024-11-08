@@ -43,7 +43,10 @@ export function NewSession({setNewSession}) {
                     <HorizRadioButton options={["Random", "Mistakes"]} selectedOption={mode} setSelectedOption={setMode}></HorizRadioButton>
                 </View>
                 <View style={{ width: "100%", alignContent: "center", justifyContent: "center", marginTop: 20, marginBottom: 24 }}>
-                    <ThemedButton onPress={() => router.push({ pathname: `/simulation`, params: { localHoles: holes === "9 Holes" ? 9 : 18, difficulty: difficulty, mode: mode }})} title="Start" disabled={holes == undefined || difficulty == undefined || mode == undefined}></ThemedButton>
+                    <ThemedButton onPress={() => {
+                                      router.push({ pathname: `/simulation`, params: { localHoles: holes === "9 Holes" ? 9 : 18, difficulty: difficulty, mode: mode }});
+                                      setNewSession(false);
+                                  }} title="Start" disabled={holes == undefined || difficulty == undefined || mode == undefined}></ThemedButton>
                 </View>
             </View>
         </ThemedView>

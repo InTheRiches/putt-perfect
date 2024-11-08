@@ -15,7 +15,7 @@ export function ThemedButton({ onPress, title = 'Save', disabled = false, ...res
           justifyContent: 'center',
           paddingVertical: 8,
           paddingHorizontal: 24,
-          borderRadius: 6,
+          borderRadius: 8,
           backgroundColor: disabled ? Colors[colorScheme ?? 'light'].buttonSecondaryDisabledBackground : Colors[colorScheme ?? 'light'].buttonPrimaryBackground,
           borderStyle: "solid",
           borderWidth: 1,

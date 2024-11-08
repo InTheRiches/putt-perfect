@@ -8,12 +8,28 @@ import { Colors } from '@/constants/Colors';
 import {SvgLogo, SvgMenu} from '../../assets/svg/SvgComponents';
 
 import  { NewSession } from '@/components/popups/NewSession';
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
+import {getAuth} from "firebase/auth";
+import {doc, getDoc, getFirestore} from "firebase/firestore";
 
 export default function HomeScreen() {
   const colorScheme = useColorScheme();
+  const auth = getAuth();
+  const db = getFirestore();
 
   const [ newSession, setNewSession ] = useState(false);
+
+  const [ userData, setUserData ] = useState([]);
+
+  useEffect(() => {
+    const docRef = doc(db, `users/${auth.currentUser.uid}`);
+    getDoc(docRef).then((data) => {
+        setUserData(data.data());
+    })
+    .catch((error) => {
+
+    });
+  })
 
   return (
     <ThemedView className="flex-1 items-center flex-col pt-12 overflow-hidden">
@@ -26,9 +42,9 @@ export default function HomeScreen() {
           <ThemedView className={"flex-row items-center"}>
             <Image source={require('../../assets/images/image.png')} style={{ width: 60, height: 60, borderRadius: 30 }} />
             <ThemedView className={"ml-4"}>
-              <ThemedText type="subtitle">Hayden Williams</ThemedText>
-              <ThemedText type="default">Since 2024</ThemedText>
-              <ThemedText type="default">84 Sessions</ThemedText>
+              <ThemedText type="subtitle">{auth.currentUser.displayName}</ThemedText>
+              <ThemedText type="default">Since {(userData === undefined || userData.length === 0) ? "~~~~" : new Date(userData.date).getFullYear() }</ThemedText>
+              <ThemedText type="default">{(userData === undefined || userData.length === 0) ? "~" : userData.totalPutts } Total Putts</ThemedText>
             </ThemedView>
           </ThemedView>
           <ThemedView className="flex-col items-center justify-center">

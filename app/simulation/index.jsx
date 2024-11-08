@@ -3,8 +3,8 @@ import {ThemedView} from '@/components/ThemedView';
 import {ThemedButton} from '@/components/ThemedButton';
 import {Checkbox} from "@/components/Checkbox";
 import {useColorScheme} from '@/hooks/useColorScheme';
-import {useLocalSearchParams, useNavigation} from 'expo-router';
-import {Image, Pressable, Text} from 'react-native';
+import {useRouter, useLocalSearchParams, useNavigation} from 'expo-router';
+import {Image, Pressable, Text, BackHandler} from 'react-native';
 import {GestureDetector, Gesture} from 'react-native-gesture-handler';
 import {runOnJS} from 'react-native-reanimated';
 import {Colors} from '@/constants/Colors';
@@ -15,6 +15,9 @@ import Svg, {Path} from 'react-native-svg';
 import {DangerButton} from "../../components/DangerButton";
 import ArrowComponent from "../../components/icons/ArrowComponent";
 import React from "react";
+import {getFirestore, setDoc, doc} from "firebase/firestore";
+import {getAuth} from "firebase/auth";
+import generatePushID from "../../components/utils/GeneratePushID";
 
 // TODO add an extreme mode with like left right left breaks
 const breaks = [
@@ -36,12 +39,12 @@ function generateBreak() {
 
 function generateDistance(difficulty) {
   // Generate a random distance
-  return Math.floor(Math.random() * (difficulty == "Easy" ? 6 : difficulty == "Medium" ? 12 : 20)) + 3;
+  return Math.floor(Math.random() * (difficulty === "Easy" ? 6 : difficulty === "Medium" ? 12 : 20)) + 3;
 }
 
 const initialState = {
   confirmLeave: false,
-  canLeave: false,
+  confirmSubmit: false,
   width: 0,
   height: 0,
   center: false,
@@ -56,12 +59,15 @@ const initialState = {
 export default function Simulation() {
   const colorScheme = useColorScheme();
   const navigation = useNavigation();
+  const db = getFirestore();
+  const auth = getAuth();
+  const router = useRouter();
 
   const {localHoles, difficulty, mode} = useLocalSearchParams();
   const holes = parseInt(localHoles);
 
   const [
-    {confirmLeave, canLeave, width, height, center, point, hole, puttBreak, distance, missRead, putts},
+    {confirmLeave, confirmSubmit, width, height, center, point, hole, puttBreak, distance, missRead, putts},
     setState
   ] = useState(initialState);
 
@@ -74,27 +80,27 @@ export default function Simulation() {
 
   const resetState = () => {
     setState(initialState);
+    console.log("state reset")
   }
 
   useEffect(() => {
     updateField("distance", generateDistance(difficulty));
-  });
+  }, []);
 
   React.useEffect(() => {
-    navigation.addListener('beforeRemove', (e) => {
-      if (confirmLeave || distance === initialState.distance) {
-        resetState();
-        return;
-      }
-
-      console.log("blocked");
-
-      // Prevent default behavior of leaving the screen (if needed)
-      e.preventDefault();
-
+    const onBackPress = () => {
       updateField("confirmLeave", true);
-    })
-  }, [navigation]);
+
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      onBackPress
+    );
+
+    return () => backHandler.remove();
+  }, []);
 
   const nextHole = () => {
     if (hole == holes || point.x === undefined) {
@@ -108,12 +114,15 @@ export default function Simulation() {
     const distanceY = height / 2 - point.y;
     const distanceMissed = center ? 0 : Math.sqrt((distanceX * distanceX) + (distanceY * distanceY));
 
+    const conversionFactor = 10 / width;
+    const distanceMissedFeet = distanceMissed * conversionFactor;
+
     const puttsCopy = [...putts];
     puttsCopy[hole - 1] = {
       distance: distance,
       break: puttBreak,
-      missed: missRead,
-      distanceMissed: distanceMissed,
+      missRead: missRead,
+      distanceMissed: distanceMissedFeet,
       point: point
     };
     updateField("putts", puttsCopy);
@@ -132,7 +141,7 @@ export default function Simulation() {
 
     const nextPutt = puttsCopy[hole];
     updateField("point", nextPutt.point);
-    updateField("missRead", nextPutt.missed);
+    updateField("missRead", nextPutt.missRead);
     updateField("center", nextPutt.distanceMissed === 0);
 
     updateField("puttBreak", nextPutt.break);
@@ -155,7 +164,7 @@ export default function Simulation() {
     puttsCopy[hole - 1] = {
       distance: distance,
       break: puttBreak,
-      missed: missRead,
+      missRead: missRead,
       distanceMissed: distanceMissed,
       point: point
     };
@@ -163,7 +172,7 @@ export default function Simulation() {
 
     const lastPutt = puttsCopy[hole - 2];
     updateField("point", lastPutt.point);
-    updateField("missRead", lastPutt.missed);
+    updateField("missRead", lastPutt.missRead);
     updateField("center", lastPutt.distanceMissed === 0);
 
     updateField("puttBreak", lastPutt.break);
@@ -193,9 +202,31 @@ export default function Simulation() {
     });
 
   const fullReset = () => {
-    console.log(confirmLeave);
-
     navigation.goBack();
+  }
+
+  const submit = () => {
+    const trimmedPutts = [];
+
+    putts.forEach((putt) => {
+      if (putt !== undefined) {
+        trimmedPutts.push({distance: putt.distance, break: putt.break, missRead: putt.missRead, distanceMissed: putt.distanceMissed});
+      }
+    });
+
+    // TODO MAKE A SPINNING WHEEL SCREEN AS IT UPLOADS
+
+    // Add a new document in collection "cities"
+    setDoc(doc(db, `users/${auth.currentUser.uid}/sessions`, generatePushID()), {
+      date: new Date().toISOString(),
+      difficulty: difficulty,
+      holes: holes,
+      mode: mode,
+      putts: trimmedPutts
+    }).then(() => {
+        // TODO add a cool little session review at the end
+        router.push({ pathname: `/` });
+    });
   }
 
   return (
@@ -302,22 +333,26 @@ export default function Simulation() {
             <View style={{flexDirection: "row", justifyContent: "space-around", marginTop: 14}}>
               <ThemedButton title="Back" disabled={hole === 1} onPress={() => lastHole()}></ThemedButton>
               <DangerButton title={"Miss > 5ft?"}></DangerButton>
-              <ThemedButton title="Next" disabled={hole == holes || point.x === undefined}
-                            onPress={() => nextHole()}></ThemedButton>
+              {hole === holes ? <ThemedButton title="Submit" disabled={point.x === undefined} onPress={() => {if (point.x !== undefined) updateField("confirmSubmit", true)}}></ThemedButton>
+                : <ThemedButton title="Next" disabled={point.x === undefined} onPress={() => nextHole()}></ThemedButton>}
             </View>
           </View>
         </ThemedView>
       </ThemedView>
       {confirmLeave && <View className="absolute inset-0 flex items-center justify-center z-50 h-screen w-full"
                              style={{backgroundColor: colorScheme == 'light' ? "rgba(0, 0, 0, 0.5)" : "rgba(0, 0, 0, 0.8)"}}>
-        <Confirmation cancel={() => updateField("confirmLeave", false)} end={fullReset}></Confirmation>
+        <ConfirmExit cancel={() => updateField("confirmLeave", false)} end={fullReset}></ConfirmExit>
+      </View>}
+      {confirmSubmit && <View className="absolute inset-0 flex items-center justify-center z-50 h-screen w-full"
+                             style={{backgroundColor: colorScheme == 'light' ? "rgba(0, 0, 0, 0.5)" : "rgba(0, 0, 0, 0.8)"}}>
+        <ConfirmSubmit cancel={() => updateField("confirmSubmit", false)} submit={submit}></ConfirmSubmit>
       </View>}
     </ThemedView>
   );
 }
 
 // TODO MAKE THIS UPLOAD A PARTIAL ROUND
-function Confirmation({end, partial, cancel}) {
+function ConfirmExit({end, partial, cancel}) {
   const colorScheme = useColorScheme();
 
   return (
@@ -340,13 +375,13 @@ function Confirmation({end, partial, cancel}) {
           flexDirection: "row",
           justifyContent: "center",
           borderRadius: 50,
-          backgroundColor: Colors[colorScheme ?? "light"].buttonDangerDisabledBackground
+          backgroundColor: Colors[colorScheme ?? "light"].buttonDangerBackground
         }}>
           <SvgWarning width={26} height={26}
-                      stroke={Colors[colorScheme ?? "light"].buttonDangerBackground}></SvgWarning>
+                      stroke={Colors[colorScheme ?? "light"].buttonDangerText}></SvgWarning>
         </View>
       </View>
-      <ThemedText type={"header"} style={{fontWeight: 500, textAlign: "center", marginTop: 10}}>End Session</ThemedText>
+      <ThemedText type={"header"} style={{fontWeight: 500, textAlign: "center", marginTop: 14}}>End Session</ThemedText>
       <ThemedText type={"default"} secondary={true} style={{textAlign: "center", lineHeight: 18, marginTop: 10}}>Are you
         sure you want to end this session? You can always upload the partial round, otherwise all data will be lost.
         This action cannot be undone.</ThemedText>
@@ -369,6 +404,63 @@ function Confirmation({end, partial, cancel}) {
       }}>
         <Text style={{textAlign: "center", color: Colors[colorScheme ?? "light"].text, fontWeight: 500}}>Upload as
           Partial</Text>
+      </Pressable>
+      <Pressable onPress={cancel} style={{
+        backgroundColor: Colors[colorScheme ?? "light"].backgroundSecondary,
+        paddingVertical: 10,
+        borderRadius: 10,
+        marginTop: 10,
+        borderWidth: 1,
+        borderColor: Colors[colorScheme ?? "light"].border
+      }}>
+        <Text style={{textAlign: "center", color: Colors[colorScheme ?? "light"].text, fontWeight: 500}}>Cancel</Text>
+      </Pressable>
+    </ThemedView>
+  )
+}
+
+function ConfirmSubmit({ submit, cancel }) {
+  const colorScheme = useColorScheme();
+
+  return (
+    <ThemedView style={{
+      borderColor: colorScheme == 'light' ? "white" : Colors['dark'].border,
+      borderWidth: 1,
+      width: "auto",
+      maxWidth: "70%",
+      maxHeight: "70%",
+      borderRadius: 16,
+      paddingTop: 20,
+      paddingBottom: 20,
+      paddingHorizontal: 20,
+      flexDirection: "col"
+    }}>
+      <View style={{justifyContent: "center", flexDirection: "row", width: "100%"}}>
+        <View style={{
+          padding: 12,
+          alignContent: "center",
+          flexDirection: "row",
+          justifyContent: "center",
+          borderRadius: 50,
+          backgroundColor: "#3EC264"
+        }}>
+          <Svg width={24} height={24} stroke={"#157530"} xmlns="http://www.w3.org/2000/svg" fill="none"
+               viewBox="0 0 24 24" strokeWidth="3">
+            <Path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5"/>
+          </Svg>
+        </View>
+      </View>
+      <ThemedText type={"header"} style={{fontWeight: 500, textAlign: "center", marginTop: 14}}>Submit Session</ThemedText>
+      <ThemedText type={"default"} secondary={true} style={{textAlign: "center", lineHeight: 18, marginTop: 10}}>Are you
+        sure you want to submit this session? Once you submit, you cannot change any of the putts.</ThemedText>
+      <Pressable onPress={submit} style={{
+        backgroundColor: "#3EC264",
+        paddingVertical: 10,
+        borderRadius: 10,
+        marginTop: 16
+      }}>
+        <Text style={{textAlign: "center", color: Colors[colorScheme ?? "light"].buttonDangerText, fontWeight: 500}}>Submit
+          Session</Text>
       </Pressable>
       <Pressable onPress={cancel} style={{
         backgroundColor: Colors[colorScheme ?? "light"].backgroundSecondary,
